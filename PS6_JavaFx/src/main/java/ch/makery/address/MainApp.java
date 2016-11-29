@@ -53,10 +53,8 @@ public class MainApp extends Application {
     {
     	personData.clear();
     	
-    	//TODO:	When PersonDAL.getPersons() is complete, fix the code 
-    	
     	ArrayList<PersonDomainModel> people = null;
-    	// people = PersonDAL.getPersons();
+    	people = PersonDAL.getPersons();
     	
     	for (PersonDomainModel p: people)
     	{

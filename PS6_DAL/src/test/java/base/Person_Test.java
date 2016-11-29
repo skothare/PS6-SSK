@@ -36,7 +36,7 @@ public class Person_Test {
 		try {
 			person1Birth = dateFormat.parse("1994-11-27");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -51,6 +51,58 @@ public class Person_Test {
 		
 	}
 	
+	@AfterClass
+	public static void teardownAfterClass() throws Exception {
+		
+	}
 	
+	@Before
+	public void setUp() throws Exception {
+		
+	}
 
+	@After
+	public void tearDown() throws Exception {
+		PersonDAL.deletePerson(person1.getPersonID());
+	}
+	
+	@Test
+	public void addPersonTest(){
+		PersonDomainModel person;
+		PersonDAL.addPerson(person1);
+		person= PersonDAL.getPerson(person1.getPersonID());
+		assertTrue(person != null);
+	}
+	
+	/**
+	 * Tests if the person details are deleted from the database.
+	 */
+	@Test
+	public void deletePersonTest(){
+		PersonDomainModel person;
+		PersonDAL.addPerson(person1);
+		person = PersonDAL.getPerson(person1.getPersonID());
+		
+		PersonDAL.deletePerson(person1.getPersonID());
+		person = PersonDAL.getPerson(person1.getPersonID());
+		assertTrue(person != null);
+	}
+	
+	/**
+	 * Tests if the person details of the person added are updated or not.
+	 */
+	@Test
+	public void updatePersonTest(){
+		PersonDomainModel person;
+		PersonDAL.addPerson(person1);
+		person1.setCity("Boston");
+		person1.setStreet("Harbour Street");
+		assertTrue(person1.getCity()=="Boston");
+		assertTrue(person1.getStreet()=="Harbour Street");
+		
+		PersonDAL.updatePerson(person1);
+		person = PersonDAL.getPerson(person1.getPersonID());
+		assertTrue(person.getCity() == person1.getCity());
+		assertTrue(person.getStreet() == person1.getStreet());
+	}
 }
