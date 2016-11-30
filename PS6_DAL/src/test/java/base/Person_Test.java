@@ -25,7 +25,7 @@ public class Person_Test {
 	private static UUID person1UUID = UUID.randomUUID();			
 	
 	@BeforeClass
-	public static void personInstance() throws Exception{
+	public static void setUpBeforeClass() throws Exception{
 		
 		Date person1Birth = null;
 
@@ -71,7 +71,7 @@ public class Person_Test {
 		PersonDomainModel person;
 		PersonDAL.addPerson(person1);
 		person= PersonDAL.getPerson(person1.getPersonID());
-		assertTrue(person != null);
+		assertNotNull(person);
 	}
 	
 	/**
@@ -82,10 +82,18 @@ public class Person_Test {
 		PersonDomainModel person;
 		PersonDAL.addPerson(person1);
 		person = PersonDAL.getPerson(person1.getPersonID());
-		
+		assertNotNull(person);
 		PersonDAL.deletePerson(person1.getPersonID());
-		person = PersonDAL.getPerson(person1.getPersonID());
-		assertTrue(person != null);
+		person=null;
+		try{
+			person = PersonDAL.getPerson(person1.getPersonID());
+		}
+		catch (IndexOutOfBoundsException e){
+			assertNull(person);
+			PersonDAL.addPerson(person1);
+		}
+		
+		
 	}
 	
 	/**
@@ -93,6 +101,7 @@ public class Person_Test {
 	 */
 	@Test
 	public void updatePersonTest(){
+		
 		PersonDomainModel person;
 		PersonDAL.addPerson(person1);
 		person1.setCity("Boston");
@@ -102,7 +111,8 @@ public class Person_Test {
 		
 		PersonDAL.updatePerson(person1);
 		person = PersonDAL.getPerson(person1.getPersonID());
-		assertTrue(person.getCity() == person1.getCity());
-		assertTrue(person.getStreet() == person1.getStreet());
+		assertEquals(person.getCity(),person1.getCity());
+		assertTrue(person.getStreet().equals( person1.getStreet()));
+		
 	}
 }
